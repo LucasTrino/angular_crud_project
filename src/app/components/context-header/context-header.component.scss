@@ -1,0 +1,12 @@
+.table-header {
+  padding: .4rem .8rem;
+
+  max-height: var(--context-header-height);
+
+  background: var(--grey-01);
+  border-bottom: 1px solid var(--grey-02);
+
+  &__title {
+    font-size: 1.7rem;
+  }
+}

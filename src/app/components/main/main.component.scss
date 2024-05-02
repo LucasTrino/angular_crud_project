@@ -1,14 +1,11 @@
 :host {
+  overflow-y: hidden;
   display: flex;
   flex-direction: column;
-
-  overflow-x: hidden;
 }
 
-.app-main {
-  height: 100vh;
+.table-wrapper {
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-
-  overflow: hidden;
 }

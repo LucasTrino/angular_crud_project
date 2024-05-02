@@ -1,0 +1,9 @@
+<app-context-header [title]="'Listagem'" [showButton]="true"></app-context-header>
+<div class="table-wrapper">
+  <app-dynamic-table
+    [datas]="tableData"
+    [headers]="tableHeaders"
+    [loading]="tableLoading"
+    [error]="tableError"
+  ></app-dynamic-table>
+</div>

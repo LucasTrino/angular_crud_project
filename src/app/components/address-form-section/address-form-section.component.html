@@ -1,0 +1,19 @@
+<section class="address-form-section">
+  <ng-content></ng-content>
+  <div class="d-flex justify-content-end">
+    <button
+      class="btn btn-primary btn-sm"
+      title="Adicionar"
+      (click)="throwAddAddress()"
+    >
+      Adicionar
+    </button>
+  </div>
+  <app-generic-table
+    [datas]="addressData"
+    [headers]="headersColumns"
+    [bordered]="true"
+    [actions]="actionsTable"
+    class="mt-3"
+  />
+</section>

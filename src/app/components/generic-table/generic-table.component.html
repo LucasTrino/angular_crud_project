@@ -1,0 +1,52 @@
+<div class="table-responsive">
+  <table
+    class="table table-striped align-middle"
+    [ngClass]="{ 'table-bordered': bordered }"
+  >
+    <thead class="table-light">
+      <tr>
+        @for(header of headers; track $index) {
+        <th scope="col" class="text-center" [title]="header.label">
+          {{ header.label }}
+        </th>
+        }
+        @if(actions && actions.length) {
+        <th
+          scope="col"
+          class="action-column text-center"
+          title="Opções"
+          aria-label="Opções"
+        >
+          Opções
+        </th>
+        }
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      @for(cell of datas; track $index) {
+      <tr>
+        @for(header of headers; track $index) {
+        <td class="text-center" [title]="cell[header.id]">
+          {{ cell[header.id] }}
+        </td>
+        }
+        @if(actions && actions.length) {
+          <td class="action-column">
+            <div class="d-flex gap-2" [ngClass]="{'justify-content-between': actions && actions.length, 'justify-content-center': !(actions && actions.length)}">
+            @for(action of actions; track $index) {
+              <button type="button" class="btn btn-sm" [ngClass]="'btn-' + action.type" [title]="action.title" (click)="action.action()">
+                <i class="material-icons icon-small">{{action.icon}}</i>
+              </button>
+              }
+            </div>
+          </td>
+        }
+      </tr>
+      } @empty {
+      <tr class="text-center">
+        <td [attr.colspan]="headers.length + 1">Sem dados para exibir...</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,17 @@
+:host {
+  &:not(:last-of-type) {
+    border-bottom: 2px solid var(--grey-02);
+    padding-bottom: 1.2rem;
+  }
+
+  &:not(:first-of-type) {
+    margin-top: 1.2rem;
+  }
+}
+
+.form-section {
+  &__title {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+}

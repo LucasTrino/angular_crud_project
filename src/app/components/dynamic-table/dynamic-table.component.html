@@ -1,0 +1,67 @@
+@if(datas && datas.length && !loading && !error.isActive) {
+<div class="table-responsive tableFixHead">
+  <table class="table table-striped align-middle">
+    <thead class="table-light">
+      <tr>
+        @for(header of headers; track $index) {
+        <th scope="col" class="text-center" [title]="header.label">
+          {{ header.label }}
+        </th>
+        }
+        <th
+          scope="col"
+          class="action-column text-center"
+          title="Opções"
+          aria-label="Opções"
+        >
+          Opções
+        </th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      @for(cell of datas; track $index) {
+      <tr>
+        @for(header of headers; track $index) {
+        <td class="text-center" [title]="cell[header.id]">
+          {{ cell[header.id] }}
+        </td>
+        }
+        <td class="action-column">
+          <div class="d-flex justify-content-between gap-2 flex-wrap">
+            <a
+              [routerLink]="['/form', cell.id]"
+              class="text-decoration-none text-reset"
+            >
+              <button
+                type="button"
+                class="btn btn-sm btn-warning"
+                title="Editar"
+                (click)="handleAction('Edit', 'edit')"
+              >
+                <i class="material-icons icon-small">edit</i>
+              </button>
+            </a>
+            <button
+              type="button"
+              class="btn btn-sm btn-danger"
+              title="Excluir"
+              (click)="handleAction('Delete', 'delete')"
+            >
+              <i class="material-icons icon-small">delete</i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+} @else {
+  @if(loading && !error.isActive){
+    <app-table-placeholder [headers_length]="5" [items_length]="10" />
+  } @else if(error.isActive && !loading) {
+    <div><h4 class="text-center">{{error.message}}</h4></div>
+  } @else {
+    <div><h4 class="text-center">Vazio</h4></div>
+  }
+}

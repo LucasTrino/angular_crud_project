@@ -1,14 +1,17 @@
 :host {
   display: flex;
   flex-direction: column;
+  flex: 1;
 
   overflow-x: hidden;
 }
 
-.app-main {
-  height: 100vh;
+.form-main {
   display: flex;
   flex-direction: column;
+  flex: 1;
 
-  overflow: hidden;
+  padding: 1.2rem;
+
+  overflow-x: auto;
 }

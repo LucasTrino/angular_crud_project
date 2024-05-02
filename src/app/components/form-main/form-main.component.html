@@ -1,0 +1,10 @@
+<main class="form-main">
+  <app-form-section [fields]="formData.personalDatas" [title]="'Dados Pessoais'" />
+  <app-address-form-section
+    (addAddress)="addAddress($event)"
+    [addressData]="data"
+    [headersColumns]="addressTableHeaders"
+  >
+    <app-form-section [fields]="formData.personalAddresses" [title]="'Endereços'" />
+  </app-address-form-section>
+</main>

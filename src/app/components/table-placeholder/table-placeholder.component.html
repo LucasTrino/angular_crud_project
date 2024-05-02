@@ -1,0 +1,16 @@
+<div class="table-placeholder">
+  <div class="table-placeholder__header">
+    @for(item of 'x'.repeat(headers_length).split(''); track $index) {
+    <div class="placeholder-glow">
+      <span class="placeholder"></span>
+    </div>
+    }
+  </div>
+  <div class="table-placeholder-items-main">
+    @for(item of 'x'.repeat(items_length).split(''); track $index) {
+    <div class="placeholder-glow">
+      <span class="placeholder"></span>
+    </div>
+    }
+  </div>
+</div>

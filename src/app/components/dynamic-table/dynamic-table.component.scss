@@ -1,0 +1,14 @@
+.tableFixHead {
+  overflow-y: auto;
+  height: calc(100vh - var(--context-header-height));
+}
+
+.tableFixHead thead th {
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid black;
+}
+
+.action-column {
+  width: 100px;
+}

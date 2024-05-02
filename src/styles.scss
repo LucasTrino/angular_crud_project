@@ -1,1 +1,22 @@
-/* You can add global styles to this file, and also import other style files */
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "material-icons/iconfont/material-icons.css";
+
+:root {
+  --grey-01: #f2f2f2;
+  --grey-02: #dcb1b1;
+
+  --context-header-height: 3.5rem;
+}
+
+$icon-sizes: (
+  small: 16px,
+  medium: 20px,
+  large: 28px,
+  x-large: 32px
+);
+
+@each $size, $value in $icon-sizes {
+  .icon-#{$size} {
+    font-size: $value !important;
+  }
+}

@@ -1,0 +1,14 @@
+<header class="table-header d-flex justify-content-between">
+  <h1 class="table-header__title">
+    {{ title }}
+  </h1>
+  <div class="d-flex align-items-center">
+    @if(showButton) {
+      <button class="table-header__btn btn btn-primary btn-sm" title="Cadastrar">
+        <a routerLink="/form" routerLinkActive="active" class="text-decoration-none text-reset">
+          <i class="material-icons icon-medium">person_add</i>
+        </a>
+      </button>
+    }
+  </div>
+</header>
