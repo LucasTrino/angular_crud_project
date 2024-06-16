@@ -1,44 +1,69 @@
-<form class="form-section">
+<form [formGroup]="form">
   <h3 class="form-section__title text-center mb-4">{{ title }}</h3>
   <div class="row">
-  @for(field of fields; track $index) {
-    @if(field.id === 'email') {
+    @for(field of fields; track $index) {
     <div class="col-6 mb-3">
-      <label class="mb-2" for="{{ field.title }}">{{ field.title }}</label>
+      <label class="mb-2" for="{{ field.name }}">{{ field.label }}</label>
+      @if(hasRequiredValidator(field.validators)) {
+      <span class="text-danger ms-2">*</span>
+      }
       <div class="input-group">
-        <span class="input-group-text" id="basic-addon1">&#64;</span>
+        @if(field.name === 'email' || field.name === 'phoneNumber' || field.name
+        === 'cellNumber') {
+        <span class="input-group-text" id="basic-addon1">
+          @if(field.name === 'email') { &#64; } @else if(field.name ===
+          'phoneNumber' || field.name === 'cellNumber') { (+55) }
+        </span>
         <input
           type="{{ field.type }}"
           class="form-control"
-          id="{{ field.title }}"
+          id="{{ field.name }}"
           placeholder="{{ field.placeholder }}"
+          [formControlName]="field.name"
+          [value]="field.value"
+          (input)="emitValidationResult(field.name)"
+          [ngClass]="{
+            'is-invalid':
+              !form.controls[field.name].valid &&
+              form.controls[field.name].touched,
+            'is-valid':
+              form.controls[field.name].valid
+          }"
+          [attr.required]="hasRequiredValidator(field.validators)"
         />
-      </div>
-    </div>
-    } @else if(field.id === 'phone' || field.id === 'cel') {
-    <div class="col-6 mb-2">
-      <label class="mb-2" for="{{ field.title }}">{{ field.title }}</label>
-      <div class="input-group">
-        <span class="input-group-text" id="basic-addon1">(+55)</span>
+        } @else {
         <input
           type="{{ field.type }}"
           class="form-control"
-          id="{{ field.title }}"
+          id="{{ field.name }}"
           placeholder="{{ field.placeholder }}"
+          [formControlName]="field.name"
+          [value]="field.value"
+          (input)="emitValidationResult(field.name)"
+          [ngClass]="{
+            'is-invalid':
+              !form.controls[field.name].valid &&
+              form.controls[field.name].touched,
+            'is-valid':
+              form.controls[field.name].valid
+          }"
+          [attr.required]="hasRequiredValidator(field.validators)"
         />
+        }
       </div>
-    </div>
-    } @else {
-    <div class="col-6 mb-2">
-      <label class="mb-2" for="{{ field.title }}">{{ field.title }}</label>
-      <input
-        type="{{ field.type }}"
-        class="form-control"
-        id="{{ field.title }}"
-        placeholder="{{ field.placeholder }}"
-      />
+      @if(!form.controls[field.name].valid && form.controls[field.name].touched)
+      {
+      <div class="text-danger mt-1">
+        @if(form.controls[field.name].hasError('required')) {
+        <div>Campo obrigatório.</div>
+        } @if(form.controls[field.name].hasError('email')) {
+        <div>E-mail inválido.</div>
+        } @if(form.controls[field.name].hasError('pattern')) {
+        <div>Formato inválido.</div>
+        }
+      </div>
+      }
     </div>
     }
-  }
   </div>
 </form>

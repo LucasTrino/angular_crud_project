@@ -6,11 +6,11 @@ import { Injectable } from '@angular/core';
 export class PersonTableHeadersService {
   getHeaders(): any {
     return [
-      { label: 'Nome', id: 'nome' },
-      { label: 'Idade', id: 'idade' },
-      { label: 'Data Nascimento', id: 'dataNascimento' },
-      { label: 'Telefone', id: 'telefone' },
-      { label: 'Celular', id: 'celular' },
+      { label: 'Nome', id: 'name' },
+      { label: 'Idade', id: 'age' },
+      { label: 'Data Nascimento', id: 'birthDate' },
+      { label: 'Telefone', id: 'phoneNumber' },
+      { label: 'Celular', id: 'cellNumber' },
     ];
   }
 }

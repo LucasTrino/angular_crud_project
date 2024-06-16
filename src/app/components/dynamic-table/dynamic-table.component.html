@@ -60,7 +60,7 @@
   @if(loading && !error.isActive){
     <app-table-placeholder [headers_length]="5" [items_length]="10" />
   } @else if(error.isActive && !loading) {
-    <div><h4 class="text-center">{{error.message}}</h4></div>
+    <app-error-display [title]="'Ooops...'" [message]="error.message"/>
   } @else {
     <div><h4 class="text-center">Vazio</h4></div>
   }

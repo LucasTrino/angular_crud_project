@@ -1,10 +1,22 @@
 <main class="form-main">
-  <app-form-section [fields]="formData.personalDatas" [title]="'Dados Pessoais'" />
-  <app-address-form-section
+  @if(loading) {
+  <app-form-placeholder />
+  } @else if(error.isActive) {
+    <app-error-display [title]="'Ooops...'" [message]="error.message"/>
+  } @else {
+  <app-form-section
+    [id]="id"
+    [fieldValues]="personDatas"
+    [fields]="formSection.personalDatas"
+    [title]="'Dados Pessoais'"
+    (validationResultEmitter)="emitSubmitButtonState($event)"
+  />
+  }
+  <!-- <app-address-form-section
     (addAddress)="addAddress($event)"
-    [addressData]="data"
+    [addressData]="addressData"
     [headersColumns]="addressTableHeaders"
   >
-    <app-form-section [fields]="formData.personalAddresses" [title]="'Endereços'" />
-  </app-address-form-section>
+    <app-form-section [fields]="formSection.personalAddresses" [title]="'Endereços'" />
+  </app-address-form-section> -->
 </main>

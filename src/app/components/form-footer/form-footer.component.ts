@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-form-footer',
@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './form-footer.component.scss'
 })
 export class FormFooterComponent {
-
+  @Input() IsDisabled: boolean = false;
 }

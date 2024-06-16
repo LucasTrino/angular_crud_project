@@ -1,5 +1,5 @@
 <section class="form-container">
   <app-context-header [title]="headerTitle" [showButton]="showHeaderButton"></app-context-header>
-  <app-form-main />
-  <app-form-footer />
+  <app-form-main [id]="id" (SubmitButtonStateEmitter)="setSubmitButtonState($event)"/>
+  <app-form-footer [IsDisabled]="submitButtonIsDisabled"/>
 </section>
