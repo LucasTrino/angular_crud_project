@@ -1,12 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 
 import { IPerson } from '../../interfaces/interface-persons-datas';
 import { FormSection } from '../../interfaces/form-types';
 
 import { FormPersonInputsService } from '../../services/form-person-inputs.service';
+import { FormButton, FormService } from '../../services/form.service';
 
 import { FormFooterComponent } from '../form-footer/form-footer.component';
 import { FormMainComponent } from '../form-main/form-main.component';
@@ -30,10 +31,24 @@ import { FormPlaceholderComponent } from '../form-placeholder/form-placeholder.c
 })
 
 export class FormComponent implements OnInit {
+  formButtons: FormButton[];
+
   constructor(
     private route: ActivatedRoute,
-    private formPersonInputsService: FormPersonInputsService
-    ) {}
+    private router: Router,
+    private formPersonInputsService: FormPersonInputsService,
+    private formService: FormService
+  ) {
+    this.formButtons = this.formService.getFormButtons(() => this.goBack(), () => this.saveData());
+  }
+
+  goBack() {
+    this.router.navigate(['/']);
+  }
+
+  saveData() {
+    console.log('Saving data');
+  }
 
   http = inject(HttpClient);
 
@@ -113,10 +128,7 @@ export class FormComponent implements OnInit {
   }
 
   setSubmitButtonState(value: boolean): void {
-    this.submitButtonIsDisabled = value;
+    this.formButtons[1].isDisabled = value;
   }
 
-  onSubmit() {
-    console.log('aqui')
-  }
 }

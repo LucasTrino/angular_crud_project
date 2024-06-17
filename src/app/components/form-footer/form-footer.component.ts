@@ -1,19 +1,21 @@
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ButtonType, ButtonService } from '../../services/button.service';
 
 @Component({
   selector: 'app-form-footer',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './form-footer.component.html',
   styleUrl: './form-footer.component.scss'
 })
 export class FormFooterComponent {
-  @Input() IsDisabled: boolean = false;
-  @Input() successAction: (() => void) | null = null;
+  @Input() arrButtons: any[] = [];
 
-  onSuccessAction() {
-    if (this.successAction) {
-      this.successAction();
-    }
+  constructor(private buttonService: ButtonService) {}
+
+  getButtonClass(type: ButtonType): string {
+    return this.buttonService.getButtonClass(type);
   }
+
 }

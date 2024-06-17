@@ -1,8 +1,12 @@
 <footer class="form-footer d-flex justify-content-between">
-  <button class="btn btn-primary btn-sm">
-    <a href="/" class="text-decoration-none text-reset"> Voltar </a>
+  @for(button of arrButtons; track $index) {
+  <button
+    class="btn btn-sm"
+    [disabled]="button.isDisabled"
+    (click)="button.action()"
+    [ngClass]="getButtonClass(button.type)"
+  >
+    <a class="text-decoration-none text-reset"> {{ button.title }} </a>
   </button>
-  <button class="btn btn-success btn-sm" [disabled]="IsDisabled" (click)="onSuccessAction()">
-    <a class="text-decoration-none text-reset"> Salvar </a>
-  </button>
+  }
 </footer>
