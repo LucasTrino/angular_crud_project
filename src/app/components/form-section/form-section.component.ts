@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule, Validators, ValidatorFn } from '@angular/forms';
+
 import { FormField } from '../../interfaces/form-types';
 import { FormService } from '../../services/form.service';
 
@@ -13,7 +14,7 @@ import { FormService } from '../../services/form.service';
 })
 export class FormSectionComponent implements OnInit {
   @Input() fields: FormField[] = [];
-  @Input() fieldValues: any = {};
+  @Input() fieldsValues: any = {};
   @Input() title: string = '';
   @Input() id: string | null = null;
 
@@ -30,7 +31,7 @@ export class FormSectionComponent implements OnInit {
 
     if (this.id) {
       this.editMode = true;
-      this.formService.populateForm(this.fieldValues, this.fields, this.form);
+      this.formService.populateForm(this.fieldsValues, this.fields, this.form);
     }
   }
 

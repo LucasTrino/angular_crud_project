@@ -1,13 +1,8 @@
 <main class="form-main">
-  @if(loading) {
-  <app-form-placeholder />
-  } @else if(error.isActive) {
-  <app-error-display [title]="'Ooops...'" [message]="error.message" />
-  } @else {
   <app-form-section
     [id]="id"
-    [fieldValues]="personDatas"
-    [fields]="formSection.personalDatas"
+    [fieldsValues]="fieldsValues"
+    [fields]="fields"
     [title]="'Dados Pessoais'"
     (validationResultEmitter)="emitSubmitButtonState($event)"
   />
@@ -21,5 +16,4 @@
       [title]="'Endereços'"
     />
   </app-address-form-section> -->
-  }
 </main>

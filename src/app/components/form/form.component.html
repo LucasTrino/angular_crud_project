@@ -1,5 +1,24 @@
 <section class="form-container">
-  <app-context-header [title]="headerTitle" [showButton]="showHeaderButton"></app-context-header>
-  <app-form-main [id]="id" (SubmitButtonStateEmitter)="setSubmitButtonState($event)"/>
-  <app-form-footer [IsDisabled]="submitButtonIsDisabled" [successAction]="onSubmit"/>
+  <app-context-header
+    [title]="headerTitle"
+    [showButton]="showHeaderButton"
+  />
+  @if(loading) {
+    <app-form-placeholder />
+  } @else if(error.isActive) {
+    <div class="error_wrapper">
+      <app-error-display [title]="'Ooops...'" [message]="error.message" />
+    </div>
+  } @else {
+    <app-form-main
+      [id]="id"
+      [fields]="formSection.personalDatas"
+      [fieldsValues]="personDatas"
+      (SubmitButtonStateEmitter)="setSubmitButtonState($event)"
+    />
+  }
+  <app-form-footer
+    [IsDisabled]="submitButtonIsDisabled"
+    [successAction]="onSubmit"
+  />
 </section>
