@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { FormField } from '../interfaces/form-types';
 
 import { DateService } from '../services/date.service';
@@ -24,8 +24,6 @@ export class FormService {
   validateFields(fields: FormField[], form: FormGroup): boolean {
     const validationResults = fields.map(field => this.isFieldValid(field.name, form));
     const allFieldsAreValid = validationResults.every(isValid => isValid);
-
-    console.log(allFieldsAreValid);
 
     return allFieldsAreValid;
   }
@@ -55,6 +53,15 @@ export class FormService {
   private isFieldValid(fieldName: string, form: FormGroup): boolean {
     const control = form.get(fieldName);
     return control ? control.valid : false;
+  }
+
+  dateValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const today = new Date();
+    const birthDate = new Date(control.value);
+    if (birthDate >= today) {
+      return { 'invalidDate': true };
+    }
+    return null;
   }
 }
 

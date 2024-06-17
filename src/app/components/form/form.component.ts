@@ -16,6 +16,7 @@ import { ContextHeader } from '../context-header/context-header.component';
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss',
 })
+
 export class FormComponent implements OnInit {
   constructor(private route: ActivatedRoute) { }
 
@@ -37,5 +38,9 @@ export class FormComponent implements OnInit {
 
   setSubmitButtonState(value: boolean): void {
     this.submitButtonIsDisabled = value;
+  }
+
+  onSubmit() {
+    console.log('aqui')
   }
 }

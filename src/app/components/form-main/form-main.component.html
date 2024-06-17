@@ -2,7 +2,7 @@
   @if(loading) {
   <app-form-placeholder />
   } @else if(error.isActive) {
-    <app-error-display [title]="'Ooops...'" [message]="error.message"/>
+  <app-error-display [title]="'Ooops...'" [message]="error.message" />
   } @else {
   <app-form-section
     [id]="id"
@@ -11,12 +11,15 @@
     [title]="'Dados Pessoais'"
     (validationResultEmitter)="emitSubmitButtonState($event)"
   />
-  }
   <!-- <app-address-form-section
     (addAddress)="addAddress($event)"
     [addressData]="addressData"
     [headersColumns]="addressTableHeaders"
   >
-    <app-form-section [fields]="formSection.personalAddresses" [title]="'Endereços'" />
+    <app-form-section
+      [fields]="formSection.personalAddresses"
+      [title]="'Endereços'"
+    />
   </app-address-form-section> -->
+  }
 </main>

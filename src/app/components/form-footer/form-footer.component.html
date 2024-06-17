@@ -2,7 +2,7 @@
   <button class="btn btn-primary btn-sm">
     <a href="/" class="text-decoration-none text-reset"> Voltar </a>
   </button>
-  <button class="btn btn-success btn-sm" [disabled]="IsDisabled">
-    <a href="#" class="text-decoration-none text-reset"> Salvar </a>
+  <button class="btn btn-success btn-sm" [disabled]="IsDisabled" (click)="onSuccessAction()">
+    <a class="text-decoration-none text-reset"> Salvar </a>
   </button>
 </footer>

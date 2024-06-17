@@ -4,6 +4,7 @@ export interface FormField {
   name: string;
   options?: string[];
   placeholder?: string;
+  addOn?: string;
   value?: any;
   validators?: any[];
 }

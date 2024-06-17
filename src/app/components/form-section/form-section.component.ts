@@ -4,8 +4,6 @@ import { FormGroup, ReactiveFormsModule, Validators, ValidatorFn } from '@angula
 import { FormField } from '../../interfaces/form-types';
 import { FormService } from '../../services/form.service';
 
-
-
 @Component({
   selector: 'app-form-section',
   standalone: true,
@@ -29,7 +27,6 @@ export class FormSectionComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.formService.createForm(this.fields);
-    console.log(this.fields)
 
     if (this.id) {
       this.editMode = true;
@@ -63,4 +60,42 @@ export class FormSectionComponent implements OnInit {
     );
     this.validationResultEmitter.emit(!fieldsAreValid);
   }
+
+  handleInput(controlName: string): void {
+    const control = this.form.get(controlName);
+    if (control) {
+      this.emitValidationResult(controlName);
+
+      if (controlName === 'cellNumber' || controlName === 'phoneNumber') {
+        control.setValue(this.formatPhoneNumber(control.value), { emitEvent: false });
+      }
+
+    }
+  }
+
+  formatPhoneNumber(value: string): string {
+    let newValue = value.replace(/\D/g, '');
+
+    if (newValue.length > 11) {
+        newValue = newValue.substring(0, 11);
+    }
+
+    if (newValue.length > 6) {
+        if (newValue.length > 10) {
+            newValue = `(${newValue.substring(0, 2)}) ${newValue.substring(2, 7)}-${newValue.substring(7, 11)}`;
+        } else {
+            newValue = `(${newValue.substring(0, 2)}) ${newValue.substring(2, 6)}-${newValue.substring(6, 10)}`;
+        }
+
+    } else if (newValue.length > 2) {
+        newValue = `(${newValue.substring(0, 2)}) ${newValue.substring(2)}`;
+    } else if (newValue.length > 0) {
+        newValue = `(${newValue}`;
+    }
+
+    return newValue;
+  }
+
 }
+
+

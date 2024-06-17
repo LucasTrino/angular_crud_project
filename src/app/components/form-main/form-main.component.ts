@@ -16,7 +16,7 @@ import { AddressTableHeaders } from '../../interfaces/interface-address-table-he
 
 import { FormPersonInputsService } from '../../services/form-person-inputs.service';
 import { AddressTableHeadersService } from '../../services/address-table-headers.service';
-import { FormService } from '../../services/form.service';
+
 @Component({
   selector: 'app-form-main',
   standalone: true,
@@ -38,19 +38,16 @@ export class FormMainComponent implements OnInit {
 
   private formPersonInputsService: FormPersonInputsService;
   private addressTableHeadersService: AddressTableHeadersService;
-  private formService: FormService;
   private route: ActivatedRoute;
 
   constructor(
     formPersonInputsService: FormPersonInputsService,
     addressTableHeadersService: AddressTableHeadersService,
-    route: ActivatedRoute,
-    formService: FormService
+    route: ActivatedRoute
   ) {
     this.formPersonInputsService = formPersonInputsService;
     this.addressTableHeadersService = addressTableHeadersService;
     this.route = route;
-    this.formService = formService;
   }
 
   message!: string;
@@ -59,7 +56,7 @@ export class FormMainComponent implements OnInit {
 
   addressTableHeaders!: AddressTableHeaders[];
   addressArray: IAddress[] = [];
-  IAddress = [];
+  addressData = [];
 
   http = inject(HttpClient);
 

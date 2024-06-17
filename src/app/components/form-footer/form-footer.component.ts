@@ -9,4 +9,11 @@ import { Component, Input } from '@angular/core';
 })
 export class FormFooterComponent {
   @Input() IsDisabled: boolean = false;
+  @Input() successAction: (() => void) | null = null;
+
+  onSuccessAction() {
+    if (this.successAction) {
+      this.successAction();
+    }
+  }
 }
