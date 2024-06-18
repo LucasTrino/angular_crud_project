@@ -5,6 +5,7 @@
     [fields]="fields"
     [title]="'Dados Pessoais'"
     (validationResultEmitter)="emitSubmitButtonState($event)"
+    (formFieldsValuesEmmiter)="emitFormValues($event)"
   />
   <!-- <app-address-form-section
     (addAddress)="addAddress($event)"

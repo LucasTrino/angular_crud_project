@@ -19,6 +19,7 @@ export class FormSectionComponent implements OnInit {
   @Input() id: string | null = null;
 
   @Output() validationResultEmitter = new EventEmitter<any>();
+  @Output() formFieldsValuesEmmiter = new EventEmitter<any>();
 
   form!: FormGroup;
 
@@ -54,7 +55,7 @@ export class FormSectionComponent implements OnInit {
     return false;
   }
 
-  emitValidationResult(name: string): void {
+  emitValidationResult(): void {
     const fieldsAreValid = this.formService.validateFields(
       this.fields,
       this.form
@@ -62,15 +63,22 @@ export class FormSectionComponent implements OnInit {
     this.validationResultEmitter.emit(!fieldsAreValid);
   }
 
+  emitFormFieldsValues(): void {
+    let formValues = this.form.value;
+    console.log(formValues);
+    this.formFieldsValuesEmmiter.emit(formValues);
+  }
+
   handleInput(controlName: string): void {
     const control = this.form.get(controlName);
     if (control) {
-      this.emitValidationResult(controlName);
 
       if (controlName === 'cellNumber' || controlName === 'phoneNumber') {
         control.setValue(this.formatPhoneNumber(control.value), { emitEvent: false });
       }
 
+      this.emitValidationResult();
+      this.emitFormFieldsValues();
     }
   }
 

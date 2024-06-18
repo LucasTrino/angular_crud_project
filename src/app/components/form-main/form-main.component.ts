@@ -29,7 +29,8 @@ export class FormMainComponent implements OnInit {
   @Input() fields: FormField[] = [];
   @Input() fieldsValues: any = {};
 
-  @Output() SubmitButtonStateEmitter = new EventEmitter<any>();
+  @Output() submitButtonStateEmitter = new EventEmitter<any>();
+  @Output() formValuesEmmiter = new EventEmitter<any>();
 
   // private formPersonInputsService: FormPersonInputsService;
   // private addressTableHeadersService: AddressTableHeadersService;
@@ -56,7 +57,11 @@ export class FormMainComponent implements OnInit {
   }
 
   emitSubmitButtonState(isDisabled: boolean): void {
-    this.SubmitButtonStateEmitter.emit(isDisabled);
+    this.submitButtonStateEmitter.emit(isDisabled);
+  }
+
+  emitFormValues(formValues: Object): void {
+    this.formValuesEmmiter.emit(formValues);
   }
 
   // addAddress(message: string) {

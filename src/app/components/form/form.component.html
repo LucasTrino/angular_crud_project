@@ -14,7 +14,8 @@
       [id]="id"
       [fields]="formSection.personalDatas"
       [fieldsValues]="personDatas"
-      (SubmitButtonStateEmitter)="setSubmitButtonState($event)"
+      (submitButtonStateEmitter)="setSubmitButtonState($event)"
+      (formValuesEmmiter)="setFormValues($event)"
     />
   }
   <app-form-footer
