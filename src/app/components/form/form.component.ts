@@ -1,12 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { lastValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 import { IPerson } from '../../interfaces/interface-persons-datas';
 import { IApiResponse } from '../../interfaces/api-response';
 import { FormSection } from '../../interfaces/form-types';
 
+import { ApiService } from '../../services/api.service';
 import { FormPersonInputsService } from '../../services/form-person-inputs.service';
 import { FormButton, FormService } from '../../services/form.service';
 
@@ -30,7 +31,6 @@ import { FormPlaceholderComponent } from '../form-placeholder/form-placeholder.c
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss',
 })
-
 export class FormComponent implements OnInit {
   formButtons: FormButton[];
 
@@ -38,7 +38,8 @@ export class FormComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private formPersonInputsService: FormPersonInputsService,
-    private formService: FormService
+    private formService: FormService,
+    private apiService: ApiService
   ) {
     this.formButtons = this.formService.getFormButtons(
       () => this.goBack(),
@@ -85,14 +86,16 @@ export class FormComponent implements OnInit {
     if (idParamExists) {
       this.id = this.route.snapshot.paramMap.get('id');
       this.editMode = true;
+
       this.headerTitle = 'Editar';
 
       try {
-        await this.loadData();
+        await this.getData();
+
         //TODO: melhorar isso.
         this.setSubmitButtonState(false);
       } catch (e) {
-        throw e;
+        console.error(e);
       }
     } else {
       this.headerTitle = 'Cadastrar';
@@ -113,22 +116,17 @@ export class FormComponent implements OnInit {
     }
   }
 
-  async loadData(): Promise<void> {
+  async getData(): Promise<void> {
     this.loading = true;
-    try {
-      const response = await lastValueFrom(
-        this.http.get<{ data?: IPerson[] }>(
-          `http://localhost:3000/api/Pessoas/${this.id}`
-        )
-      );
-      const data = response?.data;
 
-      if (data !== undefined) {
-        this.personDatas = data[0];
-      } else {
-        throw new Error('Data is undefined');
-      }
+    try {
+      const response = await firstValueFrom(
+        this.apiService.get(`Pessoas/${this.id}`)
+      );
+      this.personDatas = response.data[0];
     } catch (error) {
+      console.error('Error fetching data', error);
+
       this.error = {
         isActive: true,
         message:
@@ -140,45 +138,24 @@ export class FormComponent implements OnInit {
   }
 
   async editData(): Promise<void> {
-    console.log(this.formsArr[0])
     try {
-      const response = await lastValueFrom(
-        this.http.put<IApiResponse>(
-          `http://localhost:3000/api/Pessoas/${this.id}`,
-          this.formsArr[0]
-        )
+      const response = await firstValueFrom(
+        this.apiService.put(`Pessoas/${this.id}`, this.formsArr[0])
       );
-      const data = response?.data;
-
-      if (data) {
-        console.log('foi')
-      } else {
-        throw new Error('Data is undefined or empty');
-      }
-
+      console.log('Data successfully edited', response.code);
     } catch (error) {
-      console.log(error)
+      console.error('Error edit data', error);
     }
   }
 
   async createData(): Promise<void> {
     try {
-      const response = await lastValueFrom(
-        this.http.post<IApiResponse>(
-          `http://localhost:3000/api/Pessoas`,
-          this.formsArr[0]
-        )
+      const response = await firstValueFrom(
+        this.apiService.post(`Pessoas`, this.formsArr[0])
       );
-      const data = response?.data;
-
-      if (data) {
-        console.log('foi')
-      } else {
-        throw new Error('Data is undefined or empty');
-      }
-
+      console.log('Data successfully create', response.code);
     } catch (error) {
-      console.log(error)
+      console.error('Error create data', error);
     }
   }
 

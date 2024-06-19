@@ -30,13 +30,6 @@ export class FormService {
     return new FormGroup(group);
   }
 
-  validateFields(fields: FormField[], form: FormGroup): boolean {
-    const validationResults = fields.map(field => this.isFieldValid(field.name, form));
-    const allFieldsAreValid = validationResults.every(isValid => isValid);
-
-    return allFieldsAreValid;
-  }
-
   populateForm<T>(data: T, fields: any[], dynamicForm: FormGroup): void {
     fields.forEach(field => {
       let value: any = data[field.name as keyof T] || '';
@@ -59,15 +52,6 @@ export class FormService {
     });
   }
 
-  dateValidator(control: AbstractControl): { [key: string]: boolean } | null {
-    const today = new Date();
-    const birthDate = new Date(control.value);
-    if (birthDate >= today) {
-      return { 'invalidDate': true };
-    }
-    return null;
-  }
-
   getFormButtons(goBack: () => void, saveData: () => void): FormButton[] {
     return [
       {
@@ -83,6 +67,22 @@ export class FormService {
         action: saveData
       }
     ];
+  }
+
+  validateFields(fields: FormField[], form: FormGroup): boolean {
+    const validationResults = fields.map(field => this.isFieldValid(field.name, form));
+    const allFieldsAreValid = validationResults.every(isValid => isValid);
+
+    return allFieldsAreValid;
+  }
+
+  dateValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const today = new Date();
+    const birthDate = new Date(control.value);
+    if (birthDate >= today) {
+      return { 'invalidDate': true };
+    }
+    return null;
   }
 
   private isFieldValid(fieldName: string, form: FormGroup): boolean {

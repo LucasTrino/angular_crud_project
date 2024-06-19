@@ -1,0 +1,26 @@
+{
+  "lists": [
+    {
+      "id": "b068029f-6cc4-40e8-af8b-b5ef3676d749",
+      "title": "Fazer ",
+      "cards": []
+    },
+    {
+      "id": "15b28229-c6ab-4462-976a-b1570c0c533c",
+      "title": "Fazendo",
+      "cards": []
+    },
+    {
+      "id": "ea634773-3414-46c7-99c5-daa9014c6a2b",
+      "title": "Feito",
+      "cards": []
+    }
+  ],
+  "archive": {
+    "lists": [],
+    "cards": []
+  },
+  "settings": {
+    "labels": []
+  }
+}
