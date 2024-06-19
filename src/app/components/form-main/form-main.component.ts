@@ -7,7 +7,7 @@ import { FormSectionComponent } from '../form-section/form-section.component';
 
 // import { IAddress } from '../../interfaces/interface-address';
 // import { FormSection } from '../../interfaces/form-types';
-import { FormField } from '../../interfaces/form-types';
+import { FormField } from '../../core/interfaces/form-types';
 // import { AddressTableHeaders } from '../../interfaces/interface-address-table-headers';
 
 // import { FormPersonInputsService } from '../../services/form-person-inputs.service';

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
 import { GenericTableComponent } from '../generic-table/generic-table.component';
-import { AddressTableHeaders } from '../../interfaces/interface-address-table-headers';
+import { AddressTableHeaders } from '../../core/interfaces/interface-address-table-headers';
 
 @Component({
   selector: 'app-address-form-section',

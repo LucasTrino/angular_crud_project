@@ -3,13 +3,13 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
-import { IPerson } from '../../interfaces/interface-persons-datas';
-import { IApiResponse } from '../../interfaces/api-response';
-import { FormSection } from '../../interfaces/form-types';
+import { IPerson } from '../../core/interfaces/interface-persons-datas';
+import { IApiResponse } from '../../core/interfaces/api-response';
+import { FormSection } from '../../core/interfaces/form-types';
 
-import { ApiService } from '../../services/api.service';
-import { FormPersonInputsService } from '../../services/form-person-inputs.service';
-import { FormButton, FormService } from '../../services/form.service';
+import { ApiService } from '../../core/services/api.service';
+import { FormPersonInputsService } from '../../core/services/form-person-inputs.service';
+import { FormButton, FormService } from '../../core/services/form.service';
 
 import { FormFooterComponent } from '../form-footer/form-footer.component';
 import { FormMainComponent } from '../form-main/form-main.component';

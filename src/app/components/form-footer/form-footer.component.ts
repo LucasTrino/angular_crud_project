@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ButtonType, ButtonService } from '../../services/button.service';
+import { ButtonType, ButtonService } from '../../core/services/button.service';
 
 @Component({
   selector: 'app-form-footer',

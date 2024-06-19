@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { HttpClient, HttpClientModule} from '@angular/common/http';
 
-import { PersonTableHeadersService } from '../../services/person-table-headers.service';
-import { IPerson } from '../../interfaces/interface-persons-datas';
+import { PersonTableHeadersService } from '../../core/services/person-table-headers.service';
+import { IPerson } from '../../core/interfaces/interface-persons-datas';
 
 import { lastValueFrom } from 'rxjs';
 

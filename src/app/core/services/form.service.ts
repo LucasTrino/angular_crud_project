@@ -3,8 +3,8 @@ import { FormGroup, FormControl, AbstractControl } from '@angular/forms';
 
 import { FormField } from '../interfaces/form-types';
 
-import { DateService } from '../services/date.service';
-import { ButtonType } from '../services/button.service';
+import { DateService } from './date.service';
+import { ButtonType } from './button.service';
 
 export interface FormButton {
   title: string;
