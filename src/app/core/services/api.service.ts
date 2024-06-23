@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { IApiResponse } from '../interfaces/api-response';
-
 import { environment } from '../../../environments/environment';
+import { HttpsErrorHandling } from '../services/https-error-handling.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +14,14 @@ export class ApiService {
 
   private apiUrl = environment.apiHost;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private httpsErrorHandler: HttpsErrorHandling) { }
 
   // GET request
   get(endpoint: string, params?: any): Observable<any> {
     const options = params ? { params: new HttpParams({ fromObject: params }) } : {};
     return this.http.get<IApiResponse>(`${this.apiUrl}/${endpoint}`, options)
       .pipe(
-        catchError(this.handleError)
+        catchError((error: HttpErrorResponse) => this.handleError(error))
       );
   }
 
@@ -29,7 +29,7 @@ export class ApiService {
   post(endpoint: string, body: any): Observable<any> {
     return this.http.post<IApiResponse>(`${this.apiUrl}/${endpoint}`, body)
       .pipe(
-        catchError(this.handleError)
+        catchError((error: HttpErrorResponse) => this.handleError(error))
       );
   }
 
@@ -37,21 +37,22 @@ export class ApiService {
   put(endpoint: string, body: any): Observable<any> {
     return this.http.put<IApiResponse>(`${this.apiUrl}/${endpoint}`, body)
       .pipe(
-        catchError(this.handleError)
+        catchError((error: HttpErrorResponse) => this.handleError(error))
       );
   }
 
   // DELETE request
   delete(endpoint: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${endpoint}`)
+    return this.http.delete<IApiResponse>(`${this.apiUrl}/${endpoint}`)
       .pipe(
-        catchError(this.handleError)
+        catchError((error: HttpErrorResponse) => this.handleError(error))
       );
   }
 
   // Error handling
-  private handleError(error: any): Observable<never> {
-    console.error('An error occurred:', error);
-    return throwError(() => ('Something bad happened; please try again later.'));
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    const customError = this.httpsErrorHandler.handleHttpError(error);
+    console.error(`${customError.code} : ${customError.message}`);
+    return throwError(() => customError);
   }
 }

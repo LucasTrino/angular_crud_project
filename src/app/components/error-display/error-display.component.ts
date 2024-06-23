@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { UserMessages } from '../../core/classes/user-messages'
 
 @Component({
   selector: 'app-error-display',
@@ -10,5 +11,7 @@ import { Component, Input } from '@angular/core';
 export class ErrorDisplayComponent {
  @Input() message: string = '';
  @Input() title: string = '';
+
+ supportMessage = UserMessages.ERROR_SUPPORT_MESSAGE;
 
 }

@@ -5,9 +5,9 @@
   />
   @if(loading) {
     <app-form-placeholder />
-  } @else if(error.isActive) {
+  } @else if(errorObj.isActive) {
     <div class="error_wrapper">
-      <app-error-display [title]="'Ooops...'" [message]="error.message" />
+      <app-error-display [title]="'Ooops...'" [message]="errorObj.message" />
     </div>
   } @else {
     <app-form-main
