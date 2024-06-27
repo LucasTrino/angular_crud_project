@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormSection } from '../interfaces/form-types';
 import { Validators } from '@angular/forms';
 
-import { FormService } from '../services/form.service';
+import { FormService } from './form.service';
 
 @Injectable({
   providedIn: 'root',

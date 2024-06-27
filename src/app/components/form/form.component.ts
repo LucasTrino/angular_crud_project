@@ -3,13 +3,15 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
-import { IPerson } from '../../interfaces/interface-persons-datas';
-import { IApiResponse } from '../../interfaces/api-response';
-import { FormSection } from '../../interfaces/form-types';
+import { IPerson } from '../../core/interfaces/interface-persons-datas';
+import { FormSection } from '../../core/interfaces/form-types';
 
-import { ApiService } from '../../services/api.service';
-import { FormPersonInputsService } from '../../services/form-person-inputs.service';
-import { FormButton, FormService } from '../../services/form.service';
+import { CustomHttpsError } from '../../core/classes/custom-errors';
+import { UserMessages } from '../../core/classes/user-messages';
+
+import { ApiService } from '../../core/services/api.service';
+import { FormPersonInputsService } from '../../core/services/form-person-inputs.service';
+import { FormButton, FormService } from '../../core/services/form.service';
 
 import { FormFooterComponent } from '../form-footer/form-footer.component';
 import { FormMainComponent } from '../form-main/form-main.component';
@@ -60,10 +62,12 @@ export class FormComponent implements OnInit {
 
   formsArr: any[] = [];
 
-  error: { isActive: boolean; message: string } = {
+  errorObj: { isActive: boolean; message: string } = {
     isActive: false,
     message: '',
   };
+
+  // TODO: error: Error | null;
 
   formSection!: FormSection;
 
@@ -89,13 +93,34 @@ export class FormComponent implements OnInit {
 
       this.headerTitle = 'Editar';
 
+      this.loading = true;
+
       try {
         await this.getData();
 
         //TODO: melhorar isso.
         this.setSubmitButtonState(false);
-      } catch (e) {
-        console.error(e);
+      } catch (error) {
+        let errorMessage: string;
+
+        if (error instanceof CustomHttpsError) {
+          errorMessage = error.message;
+        } else {
+          console.error('Unexpected error:', error);
+          errorMessage = UserMessages.ERROR_UNKNOWN;
+        }
+
+        this.errorObj = {
+          isActive: true,
+          message: errorMessage,
+        };
+
+        //TODO: melhorar isso.
+        this.setSubmitButtonState(true);
+
+        throw error;
+      } finally {
+        this.loading = false;
       }
     } else {
       this.headerTitle = 'Cadastrar';
@@ -108,33 +133,17 @@ export class FormComponent implements OnInit {
 
   saveData() {
     if (this.editMode) {
-      console.log('Editing data');
       this.editData();
     } else {
       this.createData();
-      console.log('Saving data');
     }
   }
 
   async getData(): Promise<void> {
-    this.loading = true;
-
-    try {
-      const response = await firstValueFrom(
-        this.apiService.get(`Pessoas/${this.id}`)
-      );
-      this.personDatas = response.data[0];
-    } catch (error) {
-      console.error('Error fetching data', error);
-
-      this.error = {
-        isActive: true,
-        message:
-          'Não foi possível carregar os dados. Recarregue a página ou entre em contato com o administrador.',
-      };
-    } finally {
-      this.loading = false;
-    }
+    const response = await firstValueFrom(
+      this.apiService.get(`Pessoas/${this.id}`)
+    );
+    this.personDatas = response.data[0];
   }
 
   async editData(): Promise<void> {
