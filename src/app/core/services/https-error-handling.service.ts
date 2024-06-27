@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import {
-  CustomError,
+  CustomHttpsError,
   ValidationError,
   NotFoundError,
   AuthenticationError,
@@ -17,37 +17,37 @@ import {
 })
 export class HttpsErrorHandling {
 
-  handleHttpError(error: any): CustomError {
-    let customError: CustomError;
+  handleHttpError(error: any): CustomHttpsError {
+    let CustomHttpsError: CustomHttpsError;
 
     switch (error.status) {
       case 400:
-        customError = new ValidationError();
+        CustomHttpsError = new ValidationError();
         break;
       case 401:
-        customError = new AuthenticationError();
+        CustomHttpsError = new AuthenticationError();
         break;
       case 403:
-        customError = new AuthorizationError();
+        CustomHttpsError = new AuthorizationError();
         break;
       case 404:
-        customError = new NotFoundError();
+        CustomHttpsError = new NotFoundError();
         break;
       case 409:
-        customError = new ConflictError();
+        CustomHttpsError = new ConflictError();
         break;
       case 500:
-        customError = new ServerError();
+        CustomHttpsError = new ServerError();
         break;
       case 503:
-        customError = new NetworkError();
+        CustomHttpsError = new NetworkError();
         break;
       default:
-        customError = new UnknownError();
+        CustomHttpsError = new UnknownError();
         break;
     }
 
-    return customError;
+    return CustomHttpsError;
   }
 
 }

@@ -6,7 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { IPerson } from '../../core/interfaces/interface-persons-datas';
 import { FormSection } from '../../core/interfaces/form-types';
 
-import { CustomError } from '../../core/classes/custom-errors';
+import { CustomHttpsError } from '../../core/classes/custom-errors';
 import { UserMessages } from '../../core/classes/user-messages';
 
 import { ApiService } from '../../core/services/api.service';
@@ -67,6 +67,8 @@ export class FormComponent implements OnInit {
     message: '',
   };
 
+  // TODO: error: Error | null;
+
   formSection!: FormSection;
 
   personDatas: IPerson = {
@@ -101,7 +103,7 @@ export class FormComponent implements OnInit {
       } catch (error) {
         let errorMessage: string;
 
-        if (error instanceof CustomError) {
+        if (error instanceof CustomHttpsError) {
           errorMessage = error.message;
         } else {
           console.error('Unexpected error:', error);
@@ -115,6 +117,8 @@ export class FormComponent implements OnInit {
 
         //TODO: melhorar isso.
         this.setSubmitButtonState(true);
+
+        throw error;
       } finally {
         this.loading = false;
       }
