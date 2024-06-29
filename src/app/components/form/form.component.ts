@@ -9,6 +9,8 @@ import { FormSection } from '../../core/interfaces/form-types';
 import { CustomHttpsError } from '../../core/classes/custom-errors';
 import { UserMessages } from '../../core/classes/user-messages';
 
+import { MessageService } from '../../core/services/message.service';
+
 import { ApiService } from '../../core/services/api.service';
 import { FormPersonInputsService } from '../../core/services/form-person-inputs.service';
 import { FormButton, FormService } from '../../core/services/form.service';
@@ -41,13 +43,15 @@ export class FormComponent implements OnInit {
     private router: Router,
     private formPersonInputsService: FormPersonInputsService,
     private formService: FormService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private messageService: MessageService
   ) {
     this.formButtons = this.formService.getFormButtons(
       () => this.goBack(),
       () => this.saveData()
     );
   }
+
 
   http = inject(HttpClient);
 
@@ -131,9 +135,18 @@ export class FormComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  saveData() {
+  async saveData(): Promise<void> {
     if (this.editMode) {
-      this.editData();
+      this.messageService.showConfirmation('CONFIRM_UPDATE').subscribe((result: boolean) => {
+        if (result) {
+          try {
+            this.messageService.showSuccess('Sucesso!');
+            this.editData();
+          } catch(error) {
+            throw error
+          }
+        }
+      });
     } else {
       this.createData();
     }
@@ -151,9 +164,8 @@ export class FormComponent implements OnInit {
       const response = await firstValueFrom(
         this.apiService.put(`Pessoas/${this.id}`, this.formsArr[0])
       );
-      console.log('Data successfully edited', response.code);
     } catch (error) {
-      console.error('Error edit data', error);
+      throw error
     }
   }
 

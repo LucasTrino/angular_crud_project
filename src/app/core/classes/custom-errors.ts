@@ -14,9 +14,9 @@ export enum ErrorCodes {
 
 const initializeGlobalHandleMapping = () => {
   const mapping = {
-    [ErrorCodes.NOT_FOUND]: false as false,
-    [ErrorCodes.INTERNAL_SERVER]: false as false,
-    [ErrorCodes.UNKNOWN]: false as false,
+    [ErrorCodes.NOT_FOUND]: true as true,
+    [ErrorCodes.INTERNAL_SERVER]: true as true,
+    [ErrorCodes.UNKNOWN]: true as true,
 
     [ErrorCodes.SERVICE_UNAVAILABLE]: true as true,
     [ErrorCodes.VALIDATION]: true as true,
