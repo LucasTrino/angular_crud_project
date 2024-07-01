@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { catchError, finalize, Observable, of, tap, throwError } from 'rxjs';
 
 import { IPerson } from '../../core/interfaces/interface-persons-datas';
 import { FormSection } from '../../core/interfaces/form-types';
@@ -9,9 +9,7 @@ import { FormSection } from '../../core/interfaces/form-types';
 import { CustomHttpsError } from '../../core/classes/custom-errors';
 import { UserMessages } from '../../core/classes/user-messages';
 
-import { MessageService } from '../../core/services/message.service';
-
-import { ApiService } from '../../core/services/api.service';
+import { CrudService } from '../../core/services/crud.service';
 import { FormPersonInputsService } from '../../core/services/form-person-inputs.service';
 import { FormButton, FormService } from '../../core/services/form.service';
 
@@ -43,15 +41,13 @@ export class FormComponent implements OnInit {
     private router: Router,
     private formPersonInputsService: FormPersonInputsService,
     private formService: FormService,
-    private apiService: ApiService,
-    private messageService: MessageService
+    private crudService: CrudService,
   ) {
     this.formButtons = this.formService.getFormButtons(
       () => this.goBack(),
       () => this.saveData()
     );
   }
-
 
   http = inject(HttpClient);
 
@@ -87,7 +83,7 @@ export class FormComponent implements OnInit {
     change: '',
   };
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     const idParamExists = this.route.snapshot.paramMap.has('id');
     this.formSection = this.formPersonInputsService.getData();
 
@@ -99,33 +95,34 @@ export class FormComponent implements OnInit {
 
       this.loading = true;
 
-      try {
-        await this.getData();
+      this.getData().pipe(
+        finalize(() => {
+          this.loading = false;
+        })
+      ).subscribe({
+        next: () => {
+          this.setSubmitButtonState(false);
+        },
+        error: (error) => {
+          let errorMessage: string;
 
-        //TODO: melhorar isso.
-        this.setSubmitButtonState(false);
-      } catch (error) {
-        let errorMessage: string;
+          if (error instanceof CustomHttpsError) {
+            errorMessage = error.message;
+          } else {
+            console.error('Unexpected error:', error);
+            errorMessage = UserMessages.ERROR_UNKNOWN;
+          }
 
-        if (error instanceof CustomHttpsError) {
-          errorMessage = error.message;
-        } else {
-          console.error('Unexpected error:', error);
-          errorMessage = UserMessages.ERROR_UNKNOWN;
+          this.errorObj = {
+            isActive: true,
+            message: errorMessage,
+          };
+
+          this.setSubmitButtonState(true);
+
+          throw error
         }
-
-        this.errorObj = {
-          isActive: true,
-          message: errorMessage,
-        };
-
-        //TODO: melhorar isso.
-        this.setSubmitButtonState(true);
-
-        throw error;
-      } finally {
-        this.loading = false;
-      }
+      });
     } else {
       this.headerTitle = 'Cadastrar';
     }
@@ -137,47 +134,54 @@ export class FormComponent implements OnInit {
 
   async saveData(): Promise<void> {
     if (this.editMode) {
-      this.messageService.showConfirmation('CONFIRM_UPDATE').subscribe((result: boolean) => {
-        if (result) {
-          try {
-            this.messageService.showSuccess('Sucesso!');
-            this.editData();
-          } catch(error) {
-            throw error
-          }
-        }
-      });
+      this.updateRecord();
     } else {
       this.createData();
     }
   }
 
-  async getData(): Promise<void> {
-    const response = await firstValueFrom(
-      this.apiService.get(`Pessoas/${this.id}`)
+  getData(): Observable<any> {
+    if(this.id !== null) {
+      return this.crudService.getById('Pessoas', this.id).pipe(
+        tap((data) => {
+          const response = data;
+          this.personDatas = response.data[0];
+        }),
+        catchError((error) => {
+          return throwError(() => error);
+        })
+      );
+    } else {
+      return of(null)
+    }
+  }
+
+  updateRecord(): void {
+    if (this.id !== null) {
+      this.crudService.update('Pessoas', this.id, this.formsArr[0]).subscribe(
+        (result) => {
+          if (result !== null) {
+            this.goBack();
+          }
+        },
+        (error) => {
+          throw error;
+        }
+      );
+    }
+  }
+
+  createData(): void {
+    this.crudService.create('Pessoas', this.formsArr[0]).subscribe(
+      (result) => {
+        if (result !== null) {
+          this.goBack();
+        }
+      },
+      (error) => {
+        throw error;
+      }
     );
-    this.personDatas = response.data[0];
-  }
-
-  async editData(): Promise<void> {
-    try {
-      const response = await firstValueFrom(
-        this.apiService.put(`Pessoas/${this.id}`, this.formsArr[0])
-      );
-    } catch (error) {
-      throw error
-    }
-  }
-
-  async createData(): Promise<void> {
-    try {
-      const response = await firstValueFrom(
-        this.apiService.post(`Pessoas`, this.formsArr[0])
-      );
-      console.log('Data successfully create', response.code);
-    } catch (error) {
-      console.error('Error create data', error);
-    }
   }
 
   setSubmitButtonState(value: boolean): void {
