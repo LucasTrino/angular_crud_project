@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, finalize, Observable, of, tap, throwError } from 'rxjs';
+import { catchError, filter, finalize, Observable, of, tap, throwError } from 'rxjs';
 
 import { IPerson } from '../../core/interfaces/interface-persons-datas';
 import { FormSection } from '../../core/interfaces/form-types';
@@ -158,30 +158,30 @@ export class FormComponent implements OnInit {
 
   updateRecord(): void {
     if (this.id !== null) {
-      this.crudService.update('Pessoas', this.id, this.formsArr[0]).subscribe(
-        (result) => {
-          if (result !== null) {
-            this.goBack();
-          }
-        },
-        (error) => {
-          throw error;
-        }
-      );
+      this.crudService.update('Pessoas', this.id, this.formsArr[0]).pipe(
+        filter(result => result !== null),
+        tap(() => {
+          this.goBack();
+        }),
+        catchError(error => {
+          console.error('Error updating record:', error);
+          return throwError(() => error);
+        })
+      ).subscribe();
     }
   }
 
   createData(): void {
-    this.crudService.create('Pessoas', this.formsArr[0]).subscribe(
-      (result) => {
-        if (result !== null) {
-          this.goBack();
-        }
-      },
-      (error) => {
-        throw error;
-      }
-    );
+    this.crudService.create('Pessoas', this.formsArr[0]).pipe(
+      filter(result => result !== null),
+      tap(() => {
+        this.goBack();
+      }),
+      catchError(error => {
+        console.error('Error creating record:', error);
+        return throwError(() => error);
+      })
+    ).subscribe();
   }
 
   setSubmitButtonState(value: boolean): void {
