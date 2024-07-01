@@ -51,8 +51,8 @@ export class ApiService {
 
   // Error handling
   private handleError(error: HttpErrorResponse): Observable<never> {
-    const CustomHttpsError = this.httpsErrorHandler.handleHttpError(error);
-    console.error(`${CustomHttpsError.code} : ${CustomHttpsError.message}`);
-    return throwError(() => CustomHttpsError);
+    const customHttpError = this.httpsErrorHandler.handleHttpError(error);
+    console.error(`HTTP Error - Code: ${customHttpError.code}, Message: ${customHttpError.message}, URL: ${error.url}, Status: ${error.status}, Status Text: ${error.statusText}`);
+    return throwError(() => customHttpError);
   }
 }

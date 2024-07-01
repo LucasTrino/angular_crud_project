@@ -1,14 +1,18 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone, Injector} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-// import { MatDialog } from '@angular/material/dialog';
-// import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
-// , private dialog: MatDialog
+import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+
+import { DialogComponent } from '../../components/dialog-component/dialog-component.component';
+import { UserMessages } from '../classes/user-messages';
+
+type dialogType = 'CONFIRM_UPDATE' | 'CONFIRM_DELETE';
+
 @Injectable({
   providedIn: 'root',
 })
 export class MessageService {
-  constructor(private snackBar: MatSnackBar, private zone: NgZone) {}
-
+  constructor(private snackBar: MatSnackBar, private zone: NgZone, private dialog: MatDialog) {}
   // Display success message
   showSuccess(message: string) {
     this.zone.run(() => {
@@ -50,12 +54,15 @@ export class MessageService {
   }
 
   // Display confirmation dialog
-  // showConfirmation(message: string): Observable<boolean> {
-  //   const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-  //     width: '300px',
-  //     data: { message }
-  //   });
+  showConfirmation(type: dialogType): Observable<boolean> {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '45%',
+      data: {
+        title: 'Confirmar Ação',
+        content: UserMessages[type],
+      }
+    });
 
-  //   return dialogRef.afterClosed();
-  // }
+    return dialogRef.afterClosed();
+  }
 }
